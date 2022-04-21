@@ -9,4 +9,4 @@ class PdfKit:
         self.pdfkit = pdfkit
 
     def from_file(self, path, *args, **kwargs):
-        self.pdfkit.from_file(path, configuration=self.configs, *args, **kwargs)
+        return self.pdfkit.from_file(path, configuration=self.configs, *args, **kwargs)
