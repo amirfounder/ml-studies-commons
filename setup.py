@@ -5,6 +5,6 @@ setup(
     version='0.0.1',
     packages=find_packages(),
     install_requires=[
-        'pdfkit==1.0.0',
+        'daos @ git+https://github.com/amirfounder/ml-studies-daos',
     ]
 )
