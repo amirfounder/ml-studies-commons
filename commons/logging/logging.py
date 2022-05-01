@@ -18,7 +18,7 @@ class Logger:
         msg += s.ljust(100) if len(s) <= 100 else s[:97] + '...'
         return msg
 
-    def log(self, message: str, level: str, build_message=True):
+    def log(self, message: str, level: str = None, build_message: bool = True):
         if build_message:
             message = self._build_message(message, level)
         print(message)
