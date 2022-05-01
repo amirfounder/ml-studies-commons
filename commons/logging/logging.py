@@ -1,6 +1,15 @@
 from datetime import datetime
 
-from daos import LogFile
+from daos.internals.files.logging import (
+    ScraperServerLogFile,
+    ScraperExtensionLogFile
+)
+
+
+logfiles = {
+    'scraper-server': ScraperServerLogFile,
+    'scraper-extension': ScraperExtensionLogFile
+}
 
 
 def get_logger(ml_studies_component):
@@ -8,9 +17,9 @@ def get_logger(ml_studies_component):
 
 
 class Logger:
-    def __init__(self, ml_studies_component: str):
-        self.ml_studies_component = ml_studies_component
-        self.path = LogFile.dir_path + '/' + ml_studies_component
+    def __init__(self, ml_studies_component):
+        self.log_file_cls = logfiles.get(ml_studies_component)
+        self.log_file = self.log_file_cls()
 
     @staticmethod
     def _build_message(s: str, level: str, ):
@@ -20,9 +29,8 @@ class Logger:
         return msg
 
     def get_log_file(self):
-        self.log_file = LogFile(path=LogFile.last_document_path())
         if self.log_file.exceeds_max_size():
-            self.log_file = LogFile()
+            self.log_file = self.log_file_cls()
         return self.log_file
 
     def log(self, message: str, level: str = None, build_message: bool = True):
