@@ -9,7 +9,7 @@ class Logger:
     def _build_message(s: str, level: str, ):
         msg = datetime.now().isoformat().ljust(30)
         msg += level.ljust(10)
-        msg += s.ljust(100) if len(s) <= 100 else s[:97] + '...'
+        msg += s
         return msg
 
     def log(self, message: str, level: str = 'N/A', build_message: bool = True):
