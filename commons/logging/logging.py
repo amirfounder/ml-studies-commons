@@ -1,35 +1,39 @@
 from datetime import datetime
 
-from daos import (
-    ErrorLogFile,
-    WarningLogFile,
-    InfoLogFile,
-    SuccessLogFile
-)
+from daos import LogFile
 
-def build_message(s: str, _type: str):
-    msg = datetime.now().isoformat().ljust(30)
-    msg += _type.ljust(10)
-    msg += s.ljust(100) if len(s) <= 100 else s[:97] + '...'
-    return msg
+class Logger:
+    def __init__(self, ml_studies_component: str):
+        log_file = LogFile
+        log_file += "/" + ml_studies_component
 
+    @classmethod
+    def get_logger(cls, ml_studies_component: str):
+        return cls(ml_studies_component)
 
-def log_success(message: str):
-    message = build_message(message, 'SUCCESS')
-    print(message)
-    SuccessLogFile.log(message)
+    @staticmethod
+    def _build_message(s: str, _type: str, ):
+        msg = datetime.now().isoformat().ljust(30)
+        msg += _type.ljust(10)
+        msg += s.ljust(100) if len(s) <= 100 else s[:97] + '...'
+        return msg
 
-def log_info(message: str):
-    message = build_message(message, 'INFO')
-    print(message)
-    InfoLogFile.log(message)
+    def success(self, message: str):
+        message = self._build_message(message, 'SUCCESS')
+        print(message)
+        LogFile.log(message)
 
-def log_warning(message: str):
-    message = build_message(message, 'WARNING')
-    print(message)
-    WarningLogFile.log(message)
+    def info(self, message: str):
+        message = self._build_message(message, 'INFO')
+        print(message)
+        LogFile.log(message)
 
-def log_error(message: str):
-    message = build_message(message, 'ERROR')
-    print(message)
-    ErrorLogFile.log(message)
+    def warning(self, message: str):
+        message = self._build_message(message, 'WARNING')
+        print(message)
+        LogFile.log(message)
+
+    def error(self, message: str):
+        message = self._build_message(message, 'ERROR')
+        print(message)
+        LogFile.log(message)
