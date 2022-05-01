@@ -2,14 +2,15 @@ from datetime import datetime
 
 from daos import LogFile
 
+
+def get_logger(ml_studies_component):
+    return Logger(ml_studies_component)
+
+
 class Logger:
     def __init__(self, ml_studies_component: str):
-        log_file = LogFile
-        log_file.path += "/" + ml_studies_component
-
-    @classmethod
-    def get_logger(cls, ml_studies_component: str):
-        return cls(ml_studies_component)
+        self.ml_studies_component = ml_studies_component
+        self.path = LogFile.dir_path + '/' + ml_studies_component
 
     @staticmethod
     def _build_message(s: str, level: str, ):
@@ -18,13 +19,19 @@ class Logger:
         msg += s.ljust(100) if len(s) <= 100 else s[:97] + '...'
         return msg
 
+    def get_log_file(self):
+        self.log_file = LogFile(path=LogFile.last_document_path())
+        if self.log_file.exceeds_max_size():
+            self.log_file = LogFile()
+        return self.log_file
+
     def log(self, message: str, level: str = None, build_message: bool = True):
         if build_message:
             message = self._build_message(message, level)
         print(message)
-        LogFile.log(message)
+        self.get_log_file().log(message)
 
-    def success(self, message: str, build_message=True):
+    def success(self, message: str):
         self.log(message, 'SUCCESS')
 
     def info(self, message: str):
