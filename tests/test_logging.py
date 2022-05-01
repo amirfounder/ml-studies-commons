@@ -1,13 +1,8 @@
-from commons.logging import log_info, log_success, log_error, log_warning
+from commons.logging import LoggerFactory
 
-def test_log_success():
-    log_success('This is an test')
+def test():
+    t1_logger = LoggerFactory.get_logger('t1')
+    t2_logger = LoggerFactory.get_logger('t2')
 
-def test_log_info():
-    log_info('This is an test')
-    
-def test_log_warning():
-    log_warning('This is an test')
-    
-def test_log_error():
-    log_error('This is an test')
+    t1_logger.info('This is a test')
+    t2_logger.error('lol')
